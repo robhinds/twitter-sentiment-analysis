@@ -50,7 +50,7 @@ class TweetAnalyticsService {
 	]
 		
 	public List<String> getCountriesFromTweet( String tweet ){
-		isRwcTweet ? COUNTRY_MAP.findAll{ hashtag, country -> tweet.contains( hashtag ) }
+		isRwcTweet( tweet ) ? COUNTRY_MAP.findAll{ hashtag, country -> tweet.contains( hashtag ) }
 			.collect{ hashtag, country -> country }
 			.unique() 
 			: []

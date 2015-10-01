@@ -9,12 +9,12 @@ public class RedisService {
 	
 	private final String ALL_TWEETS = "ALL_TWEETS"
 
-	@Autowired private RedisTemplate<String, Map> redisTemplate
+	@Autowired private RedisTemplate<String, Set> redisTemplate
 	
 	public void saveTweet( String tweet, List<String> countries ){
-		redisTemplate.setOps().add( ALL_TWEETS, tweet )
+		redisTemplate.opsForSet().add( ALL_TWEETS, tweet )
 		countries.each{
-			redisTemplate.setOps().add( it, tweet )
+			redisTemplate.opsForSet().add( it, tweet )
 		}
 	}
 	
