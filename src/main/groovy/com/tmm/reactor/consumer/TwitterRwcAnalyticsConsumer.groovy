@@ -13,6 +13,7 @@ import reactor.bus.Event
 import reactor.bus.EventBus
 import reactor.fn.Consumer
 import static reactor.bus.selector.Selectors.$
+import groovy.util.logging.Log4j
 
 
 /**
@@ -24,6 +25,7 @@ import static reactor.bus.selector.Selectors.$
  * @author robhinds
  */
 @Service
+@Log4j
 class TwitterRwcAnalyticsConsumer implements Consumer<Event<SocialContent>> {
 	
 	@Autowired private TweetAnalyticsService tweetAnalyticsService
@@ -36,10 +38,9 @@ class TwitterRwcAnalyticsConsumer implements Consumer<Event<SocialContent>> {
 	public void accept(Event<SocialContent> event) {
 		String tweet = event.getData().text
 		if ( tweetAnalyticsService.isRwcTweet( tweet ) ) {
-			println "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-			println tweet
-			println "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 			List countries = tweetAnalyticsService.getCountriesFromTweet( tweet )
+			log.info "Tweet: $tweet"
+			log.info "Mentioned countries: $countries"
 			redisService.saveTweet( tweet, countries )
 		}
 	}

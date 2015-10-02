@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service
 
 import com.tmm.reactor.domain.SocialContent
 
+import groovy.util.logging.Log4j;
 import reactor.bus.Event
 import reactor.bus.EventBus
 import reactor.fn.Consumer
 import static reactor.bus.selector.Selectors.$
+
+import java.util.concurrent.atomic.AtomicInteger
 
 
 /**
@@ -21,15 +24,16 @@ import static reactor.bus.selector.Selectors.$
  * @author robhinds
  */
 @Service
+@Log4j
 class SocialContentLoggingConsumer implements Consumer<Event<SocialContent>> {
 
+	private AtomicInteger counter=0
+	
 	@Inject public SocialContentLoggingConsumer( EventBus eventBus ){
 		eventBus.on($("socialcontent"), this );
 	}
 	
 	public void accept(Event<SocialContent> event) {
-		println "**********************"
-		println event.getData().text
-		println "**********************"
+		log.info "Tweets received: ${counter.incrementAndGet()}"
 	}
 }
