@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 class SocialContent {
-	private enum SocialProvider { TWITTER }
+	public enum SocialProvider { TWITTER }
 	
 	private String text
 	private SocialProvider provider
