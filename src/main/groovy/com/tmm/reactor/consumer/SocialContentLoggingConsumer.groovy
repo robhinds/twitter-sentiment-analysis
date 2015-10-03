@@ -27,13 +27,16 @@ import java.util.concurrent.atomic.AtomicInteger
 @Log4j
 class SocialContentLoggingConsumer implements Consumer<Event<SocialContent>> {
 
-	private AtomicInteger counter=0
+	private AtomicInteger counter
 	
 	@Inject public SocialContentLoggingConsumer( EventBus eventBus ){
-		eventBus.on($("socialcontent"), this );
+		eventBus.on($("socialcontent"), this )
+		counter = new AtomicInteger( 0 )
 	}
 	
 	public void accept(Event<SocialContent> event) {
-		log.info "Tweets received: ${counter.incrementAndGet()}"
+		int count = counter.incrementAndGet()
+		if ( count % 1000 == 0 )
+			log.info "Tweets received: ${count}"
 	}
 }
