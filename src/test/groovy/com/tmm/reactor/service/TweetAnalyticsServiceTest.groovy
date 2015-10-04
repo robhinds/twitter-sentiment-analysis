@@ -14,7 +14,7 @@ class TweetAnalyticsServiceTest {
 	
 	@Test public void nonRwcTweet(){
 		assertFalse service.isRwcTweet( "random tweet with random #funsies hashtag " )
-		assertFalse service.isRwcTweet( "random tweet with random #rwc20 hashtag " )
+		assertFalse service.isRwcTweet( "random tweet with random #rwd hashtag " )
 	}
 	
 	@Test public void getSingleCountryFromTweet(){
