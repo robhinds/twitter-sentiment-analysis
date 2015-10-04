@@ -1,9 +1,65 @@
-<html>
-	<head>
-		<title>Hello Twitter</title>
-	</head>
-	<body>
-		<h3>Hello!</h3>
-		<h4>You are now connected to the firehose!</h4>
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<meta name="RWC 2015 tweet logger" content="" />
+	<meta name="@rob_hinds" content="" />
+	<link rel="icon" href="../../favicon.ico" />
+	
+	<title>RWC2015 Tweet-eater</title>
+	<link href="" th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+	
+	<style type="text/css">
+		.wrapper{
+			background: url('/images/rwc.png') no-repeat   center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+			color: white;
+		}
+		.white-bg{
+			padding: 25px;
+			margin-top: 40px;
+			background-color:rgba(0,0,0,0.4);
+		}
+	</style>
+	
+  </head>
+
+  <body class="wrapper">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+	<div class="container white-bg">
+        <h1>RWC2015 Tweet-eater</h1>
+		<table class="table table-hover">
+			<tr>
+				<th>Country</th>
+				<th>Number of tweets</th>
+			</tr>
+			<tr th:each="country : ${countryTweets}" >
+				<td th:text="${country.country}">Argentina</td>
+				<td th:text="${country.number}">1</td>
+			</tr>
+		</table>
+	</div>
+
+    <div class="container">
+      <hr/>
+      <footer>
+        <p>@rob_hinds</p>
+        <p>http://automateddeveloper.blogspot.com</p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+  </body>
 </html>

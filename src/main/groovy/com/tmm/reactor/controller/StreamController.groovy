@@ -1,6 +1,7 @@
 package com.tmm.reactor.controller
 
 import com.tmm.reactor.domain.SocialContent
+import com.tmm.reactor.service.RedisService;
 import com.tmm.reactor.twitter.listener.TwitterStreamListener
 import javax.inject.Inject
 
@@ -25,6 +26,7 @@ public class StreamController {
     @Autowired private ConnectionRepository connectionRepository
 	@Autowired private EventBus eventBus
 	@Autowired private TwitterStreamListener twitterStreamListener
+	@Autowired private RedisService redisService
 	
 
     @RequestMapping(method=RequestMethod.GET)
@@ -47,7 +49,11 @@ public class StreamController {
 	}
 	
 	@RequestMapping(value="/stats", method=RequestMethod.GET)
-	public String stats() {
+	public String stats( Model model ) {
+		List countriesCount = redisService.getTweetsByCountry()
+			.collect{ key, value -> [ country: key, number: value.number ] }
+			.sort{ a,b -> b.number<=>a.number }
+		model.addAttribute( "countryTweets", countriesCount )
 		"stats"
 	}
 	
