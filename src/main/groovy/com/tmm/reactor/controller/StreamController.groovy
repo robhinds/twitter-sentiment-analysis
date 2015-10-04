@@ -19,7 +19,7 @@ import reactor.bus.EventBus
 
 @Controller
 @RequestMapping("/")
-public class HelloController {
+public class StreamController {
 
     @Autowired private Twitter twitter
     @Autowired private ConnectionRepository connectionRepository
@@ -28,15 +28,30 @@ public class HelloController {
 	
 
     @RequestMapping(method=RequestMethod.GET)
-    public String helloTwitter(Model model) {
+    public String welcomePage() {
         if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
-            "redirect:/connect/twitter"
+            "connect/twitterConnect"
         } else {
-			twitter.streamingOperations().sample( [ twitterStreamListener ] )
-			model.addAttribute(twitter.userOperations().getUserProfile())
-			CursoredList<TwitterProfile> friends = twitter.friendOperations().getFriends()
-			model.addAttribute("friends", friends)
-			"hello"
+			"redirect:/stats"
         }
     }
+	
+	@RequestMapping(value="/stream", method=RequestMethod.GET)
+	public String startStreaming() {
+		if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
+			"redirect:/"
+		} else {
+			twitter.streamingOperations().sample( [ twitterStreamListener ] )
+			"redirect:/stats"
+		}
+	}
+	
+	@RequestMapping(value="/stats", method=RequestMethod.GET)
+	public String stats() {
+		"stats"
+	}
+	
+	
+	
+	
 }

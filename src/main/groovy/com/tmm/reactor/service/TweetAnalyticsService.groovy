@@ -83,4 +83,7 @@ class TweetAnalyticsService {
 		tweet.toLowerCase().contains( RWC.toLowerCase() )
 	}
 	
+	public List getCountries(){
+		COUNTRY_MAP.collect{ k,v -> v }.unique()
+	}
 }
