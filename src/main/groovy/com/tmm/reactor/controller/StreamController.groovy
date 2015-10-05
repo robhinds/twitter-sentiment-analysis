@@ -43,7 +43,7 @@ public class StreamController {
         if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
             "redirect:/"
         } else {
-            twitter.streamingOperations().sample( [ twitterStreamListener ] )
+            twitter.streamingOperations().filter( "rwc,rwc2015", [ twitterStreamListener ] )
             "redirect:/stats"
         }
     }
