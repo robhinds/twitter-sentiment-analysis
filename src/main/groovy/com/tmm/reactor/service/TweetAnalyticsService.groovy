@@ -1,6 +1,6 @@
 package com.tmm.reactor.service
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Service
 
 @Service
 class TweetAnalyticsService {
@@ -75,8 +75,7 @@ class TweetAnalyticsService {
     public List<String> getCountriesFromTweet( String tweet ){
         COUNTRY_MAP.findAll{ hashtag, country -> tweet.toLowerCase().contains( hashtag.toLowerCase() ) }
             .collect{ hashtag, country -> country }
-            .unique() 
-            : []
+            .unique()
     }
 	
     public boolean isRwcTweet( String tweet ){
