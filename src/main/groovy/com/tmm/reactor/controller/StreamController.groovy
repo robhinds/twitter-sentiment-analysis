@@ -24,9 +24,9 @@ public class StreamController {
 
     @Autowired private Twitter twitter
     @Autowired private ConnectionRepository connectionRepository
-	@Autowired private EventBus eventBus
-	@Autowired private TwitterStreamListener twitterStreamListener
-	@Autowired private RedisService redisService
+    @Autowired private EventBus eventBus
+    @Autowired private TwitterStreamListener twitterStreamListener
+    @Autowired private RedisService redisService
 	
 
     @RequestMapping(method=RequestMethod.GET)
@@ -34,30 +34,26 @@ public class StreamController {
         if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
             "connect/twitterConnect"
         } else {
-			"redirect:/stats"
+            "redirect:/stats"
         }
     }
 	
-	@RequestMapping(value="/stream", method=RequestMethod.GET)
-	public String startStreaming() {
-		if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
-			"redirect:/"
-		} else {
-			twitter.streamingOperations().sample( [ twitterStreamListener ] )
-			"redirect:/stats"
-		}
-	}
+    @RequestMapping(value="/stream", method=RequestMethod.GET)
+    public String startStreaming() {
+        if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
+            "redirect:/"
+        } else {
+            twitter.streamingOperations().sample( [ twitterStreamListener ] )
+            "redirect:/stats"
+        }
+    }
 	
-	@RequestMapping(value="/stats", method=RequestMethod.GET)
-	public String stats( Model model ) {
-		List countriesCount = redisService.getTweetsByCountry()
-			.collect{ key, value -> [ country: key, number: value.number ] }
-			.sort{ a,b -> b.number<=>a.number }
-		model.addAttribute( "countryTweets", countriesCount )
-		"stats"
-	}
-	
-	
-	
-	
+    @RequestMapping(value="/stats", method=RequestMethod.GET)
+    public String stats( Model model ) {
+        List countriesCount = redisService.getTweetsByCountry()
+            .collect{ key, value -> [ country: key, number: value.number ] }
+            .sort{ a,b -> b.number<=>a.number }
+        model.addAttribute( "countryTweets", countriesCount )
+        "stats"
+    }
 }
