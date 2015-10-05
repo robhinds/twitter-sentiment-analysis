@@ -15,7 +15,6 @@ import reactor.bus.EventBus
 public class StatsController {
 
     @Autowired private RedisService redisService
-	
 
     @RequestMapping( value="country", method=RequestMethod.GET)
     public Map tweetsByCountry() {
