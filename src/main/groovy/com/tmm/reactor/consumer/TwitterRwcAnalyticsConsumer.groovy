@@ -28,20 +28,18 @@ import groovy.util.logging.Log4j
 @Log4j
 class TwitterRwcAnalyticsConsumer implements Consumer<Event<SocialContent>> {
 	
-	@Autowired private TweetAnalyticsService tweetAnalyticsService
-	@Autowired private RedisService redisService
+    @Autowired private TweetAnalyticsService tweetAnalyticsService
+    @Autowired private RedisService redisService
 
-	@Inject public TwitterRwcAnalyticsConsumer( EventBus eventBus ){
-		eventBus.on($("socialcontent"), this )
-	}
+    @Inject public TwitterRwcAnalyticsConsumer( EventBus eventBus ){
+        eventBus.on($("socialcontent"), this )
+    }
 	
-	public void accept(Event<SocialContent> event) {
-		String tweet = event.getData().text
-		if ( tweetAnalyticsService.isRwcTweet( tweet ) ) {
-			List countries = tweetAnalyticsService.getCountriesFromTweet( tweet )
-			log.info "Tweet: $tweet"
-			log.info "Mentioned countries: $countries"
-			redisService.saveTweet( tweet, countries )
-		}
-	}
+    public void accept(Event<SocialContent> event) {
+        String tweet = event.getData().text
+        List countries = tweetAnalyticsService.getCountriesFromTweet( tweet )
+        log.info "Tweet: $tweet"
+        log.info "Mentioned countries: $countries"
+        redisService.saveTweet( tweet, countries )
+    }
 }
