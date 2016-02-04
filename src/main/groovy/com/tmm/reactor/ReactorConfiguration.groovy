@@ -13,6 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.GenericToStringSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer
 
+import com.twitter.Extractor;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP
+
 import reactor.Environment
 import reactor.bus.EventBus
 
@@ -31,12 +34,29 @@ class ReactorConfiguration {
 		new JedisConnectionFactory()
 	}
    
-	@Bean RedisTemplate< String, Set > redisTemplate() {
-		final RedisTemplate< String, Set > template =  new RedisTemplate< String, Set >()
+	@Bean RedisTemplate< String, String > redisTemplate() {
+		final RedisTemplate< String, String > template =  new RedisTemplate< String, String >()
 		template.setConnectionFactory( jedisConnectionFactory() )
 		template.setKeySerializer( new StringRedisSerializer() )
-		template.setHashValueSerializer( new GenericToStringSerializer< Set >( Set ) )
-		template.setValueSerializer( new GenericToStringSerializer< Set >( Set ) )
+		template.setHashValueSerializer( new GenericToStringSerializer< String >( String ) )
+		template.setValueSerializer( new GenericToStringSerializer< String >( String ) )
 		template
+	}
+	
+	/**
+	 * Twitter open source library for parsing tweets - just re-using
+	 * the cashtag parsing functionality
+	 */
+	@Bean public Extractor extractor(){
+		new Extractor()
+	}
+	
+	/**
+	 * Stanfords NLP open source library - used for basic sentiment analysis
+	 */
+	@Bean public StanfordCoreNLP stanfordCoreNLP() {
+		Properties props = new Properties()
+		props.setProperty("annotators", "tokenize, ssplit, parse, sentiment, pos, lemma")
+		new StanfordCoreNLP( props )
 	}
 }

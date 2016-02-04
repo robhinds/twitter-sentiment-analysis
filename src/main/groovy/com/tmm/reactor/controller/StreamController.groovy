@@ -43,17 +43,15 @@ public class StreamController {
         if ( !connectionRepository.findPrimaryConnection( Twitter ) ) {
             "redirect:/"
         } else {
-            twitter.streamingOperations().filter( "rwc,rwc2015", [ twitterStreamListener ] )
+            twitter.streamingOperations().filter( '$AAPL,$GOOG,$FB,$TSLA,$TWTR,$GOOGL,$BBRY,$AMZN,$NFLX,$MSFT,$LNKD,$IBM', [ twitterStreamListener ] )
             "redirect:/stats"
         }
     }
 	
     @RequestMapping(value="/stats", method=RequestMethod.GET)
     public String stats( Model model ) {
-        List countriesCount = redisService.getTweetsByCountry()
-            .collect{ key, value -> [ country: key, number: value.number ] }
-            .sort{ a,b -> b.number<=>a.number }
-        model.addAttribute( "countryTweets", countriesCount )
+        List symbolScores = redisService.getAllSymbolsWithScores().sort{a,b -> b.momentum<=>a.momentum }
+        model.addAttribute( "symbolScores", symbolScores )
         "stats"
     }
 }

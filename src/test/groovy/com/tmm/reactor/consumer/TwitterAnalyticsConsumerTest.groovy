@@ -2,7 +2,9 @@ package com.tmm.reactor.consumer
 
 import com.tmm.reactor.domain.SocialContent
 import com.tmm.reactor.service.RedisService
+import com.tmm.reactor.service.SentimentService
 import com.tmm.reactor.service.TweetAnalyticsService
+import com.twitter.Extractor
 import org.junit.Test
 import org.junit.Before
 
@@ -12,16 +14,18 @@ import reactor.fn.Consumer
 import static reactor.bus.selector.Selectors.$
 import static org.mockito.Mockito.*
 
-class TwitterRwcAnalyticsConsumerTest {
+class TwitterAnalyticsConsumerTest {
 
-	private TwitterRwcAnalyticsConsumer consumer
+	private TwitterAnalyticsConsumer consumer
 	private RedisService redis
 	
 	@Before public void setupConsumer(){
 		EventBus bus = mock( EventBus )
-		consumer = new TwitterRwcAnalyticsConsumer( bus )
+		consumer = new TwitterAnalyticsConsumer( bus )
 		consumer.tweetAnalyticsService = new TweetAnalyticsService()
-		redis = [ saveTweet: { tweet, countries -> true } ] as RedisService
+		consumer.tweetAnalyticsService.extractor = new Extractor()
+		consumer.sentimentService = [calculateSentimentScore: { String tweet -> 4 }] as SentimentService
+		redis = [ saveTweet: { tweet, countries, score -> true } ] as RedisService
 		consumer.redisService = redis
 	}
 	

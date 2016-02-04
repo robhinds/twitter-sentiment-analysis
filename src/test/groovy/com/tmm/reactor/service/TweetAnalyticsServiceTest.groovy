@@ -1,32 +1,27 @@
 package com.tmm.reactor.service
 
+import com.twitter.Extractor
 import org.junit.Test
+import org.junit.Before
 import static org.junit.Assert.*
 
 class TweetAnalyticsServiceTest {
 	
 	TweetAnalyticsService service = new TweetAnalyticsService()
 	
-	@Test public void validRwcTweet(){
-		assertTrue service.isRwcTweet( "random valid tweet with upper case #RWC2015 hashtag " )
-		assertTrue service.isRwcTweet( "random valid tweet with lower case #rwc2015 hashtag " )
+	@Before public void setupExtractor(){
+		service.extractor = new Extractor()
 	}
 	
-	@Test public void nonRwcTweet(){
-		assertFalse service.isRwcTweet( "random tweet with random #funsies hashtag " )
-		assertFalse service.isRwcTweet( "random tweet with random #rwd hashtag " )
+	@Test public void getSingleSymbolFromTweet(){
+		assertEquals( ["GOOG"], service.getSymbolsFromTweet( 'crazy $GOOG tweet about #wal' ) ) 
 	}
 	
-	@Test public void getSingleCountryFromTweet(){
-		assertEquals( ["Wales"], service.getCountriesFromTweet( "crazy #rwc2015 tweet about #wal" ) ) 
+	@Test public void getMultipleSymbolsFromTweet(){
+		assertEquals( ["AAPL", "GOOG"], service.getSymbolsFromTweet( 'who will win the moile wars $GOOG vs $AAPL' ).sort() )
 	}
 	
-	@Test public void getMultipleCountriesFromTweet(){
-		assertEquals( ["Fiji", "Wales"], service.getCountriesFromTweet( "crazy #rwc2015 tweet about #wal vs #fji" ).sort() )
+	@Test public void getMultipleUniqueSymbolsFromTweet(){
+		assertEquals( ["AAPL", "GOOG"], service.getSymbolsFromTweet( 'lots of stocks stuff $GOOG $AAPL $GOOG' ).sort() )
 	}
-	
-	@Test public void getMultipleUniqueCountriesFromTweet(){
-		assertEquals( ["Fiji", "Wales"], service.getCountriesFromTweet( "crazy #rwc2015 tweet #wal to win - #IAmWales about #wal vs #fji" ).sort() )
-	}
-
 }

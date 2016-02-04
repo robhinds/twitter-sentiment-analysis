@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<meta name="RWC 2015 tweet logger" content="" />
+	<meta name="Billy Ray Stock Analysis" content="" />
 	<meta name="@rob_hinds" content="" />
 	<link rel="icon" href="../../favicon.ico" />
 	
-	<title>RWC2015 Tweet-eater</title>
+	<title>Billy Ray Stock Analysis</title>
 	<link href="" th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
 	
 	<style type="text/css">
 		.wrapper{
-			background: url('/images/rwc.png') no-repeat   center center fixed;
+			background: url('/images/trading.jpg') no-repeat   center center fixed;
 			-webkit-background-size: cover;
 			-moz-background-size: cover;
 			-o-background-size: cover;
@@ -34,15 +34,17 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="container white-bg">
-        <h1>RWC2015 Tweet-eater</h1>
+        <h1>Billy Ray Stock Analysis</h1>
 		<table class="table table-hover">
 			<tr>
-				<th>Country</th>
-				<th>Number of tweets</th>
+				<th>Symbol</th>
+				<th>Sentiment</th>
+				<th>Momentum</th>
 			</tr>
-			<tr th:each="country : ${countryTweets}" >
-				<td th:text="${country.country}">Argentina</td>
-				<td th:text="${country.number}">1</td>
+			<tr th:each="symbol : ${symbolScores}" >
+				<td th:text="${symbol.symbol}">Argentina</td>
+				<td th:text="${symbol.sentiment}">1</td>
+				<td th:text="${symbol.momentum}">1</td>
 			</tr>
 		</table>
 	</div>

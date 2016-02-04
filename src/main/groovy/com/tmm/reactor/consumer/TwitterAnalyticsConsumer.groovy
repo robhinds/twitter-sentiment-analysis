@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 
 import com.tmm.reactor.domain.SocialContent
 import com.tmm.reactor.service.RedisService
+import com.tmm.reactor.service.SentimentService
 import com.tmm.reactor.service.TweetAnalyticsService
 
 import reactor.bus.Event
@@ -19,27 +20,34 @@ import groovy.util.logging.Log4j
 /**
  * Implements the Reactor {@link Consumer} interface that can be setup
  * to listen to the EventBus.  This class listens to the EventBus for 
- * "socialcontent" events and then performs some tweet analysis on them - checking if
- * they are Rugby World Cup related and then persists info to redis if relevant
+ * "socialcontent" events and then performs some tweet analysis on them 
+ * and then persists the results
  * 
  * @author robhinds
  */
 @Service
 @Log4j
-class TwitterRwcAnalyticsConsumer implements Consumer<Event<SocialContent>> {
+class TwitterAnalyticsConsumer implements Consumer<Event<SocialContent>> {
 	
     @Autowired private TweetAnalyticsService tweetAnalyticsService
     @Autowired private RedisService redisService
+	@Autowired private SentimentService sentimentService
 
-    @Inject public TwitterRwcAnalyticsConsumer( EventBus eventBus ){
+    @Inject public TwitterAnalyticsConsumer( EventBus eventBus ){
         eventBus.on($("socialcontent"), this )
     }
 	
     public void accept(Event<SocialContent> event) {
         String tweet = event.getData().text
-        List countries = tweetAnalyticsService.getCountriesFromTweet( tweet )
+        List symbols = tweetAnalyticsService.getSymbolsFromTweet( tweet )
         log.info "Tweet: $tweet"
-        log.info "Mentioned countries: $countries"
-        redisService.saveTweet( tweet, countries )
+        log.info "Mentioned stocks: $symbols"
+		if ( symbols ){
+			int score = sentimentService.calculateSentimentScore( tweet )
+			log.info "Tweet scored: $score - persisting to Redis"
+			redisService.saveTweet( tweet, symbols, score )
+		}
+		
+		log.info "-------------------------------"
     }
 }

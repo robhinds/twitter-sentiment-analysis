@@ -32,6 +32,9 @@ dependencies {
 	compile("org.codehaus.groovy:groovy")
 	compile("com.fasterxml.jackson.core:jackson-databind")
 	compile("io.projectreactor:reactor-bus:2.0.2.RELEASE")
+	compile("edu.stanford.nlp:stanford-corenlp:3.6.0")
+	compile("edu.stanford.nlp:stanford-corenlp:3.6.0:models")
+	compile("com.twitter:twitter-text:1.13.0")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
