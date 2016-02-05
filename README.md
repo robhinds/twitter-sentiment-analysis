@@ -6,3 +6,6 @@ Anyway, I hooked it all up with a twitter stream filtering for a handful of tech
 
 
 Mostly I just wanted to make a web app that could have lame references to Eddie Murphy's character in Trading Places.
+
+
+Additional write up of the project here: http://automateddeveloper.blogspot.co.uk/2016/02/sentiment-analysis-of-stock-tweets.html
